@@ -4,46 +4,79 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Lazaro** — a multi-condominium management system. This repository holds the PostgreSQL database schema. The Spring Boot backend lives in the sibling directory `../administracionedificios_be`.
+**Lazaro** — sistema de administración de condominios multi-tenant. Este repositorio contiene el esquema PostgreSQL. El backend Spring Boot vive en `../administracionedificios_be`, el frontend React en `../administracionedificios_front`.
 
-## Database Setup
+## Setup
 
+### Con Docker (recomendado)
 ```bash
-# Create the database first (one-time)
-psql -U postgres -c "CREATE DATABASE lazarodb;"
+# Desde la raíz del workspace
+docker-compose up -d db
+```
+El contenedor aplica automáticamente todos los archivos `sql/*.sql` en orden al iniciar.
 
-# Apply schema, seed data, and views in order
-psql -h localhost -U postgres -d lazarodb -f sql/01_schema.sql
-psql -h localhost -U postgres -d lazarodb -f sql/02_seed.sql
-psql -h localhost -U postgres -d lazarodb -f sql/03_views_and_queries.sql
+### Manual
+```bash
+psql -U postgres -c "CREATE DATABASE lazarodb;"
+psql -U postgres -d lazarodb -f sql/01_schema.sql
+psql -U postgres -d lazarodb -f sql/02_seed.sql
+psql -U postgres -d lazarodb -f sql/03_views_and_queries.sql
+psql -U postgres -d lazarodb -f sql/04_missing_elements.sql
+psql -U postgres -d lazarodb -f sql/05_auth.sql
 ```
 
-The SQL files must be applied in order — `01` defines tables, `02` inserts test data, `03` creates views that depend on both.
+Los archivos deben aplicarse en orden numérico — cada uno depende del anterior.
 
-All tables live under the `lazaro` schema (e.g., `lazaro.condominiums`).
+## Archivos SQL
 
-## Architecture
+| Archivo | Contenido |
+|---|---|
+| `01_schema.sql` | Tablas principales bajo el schema `lazaro.*` |
+| `02_seed.sql` | Datos de prueba: condominios, usuarios, unidades, gastos, etc. |
+| `03_views_and_queries.sql` | Vistas: `vw_pending_common_expenses`, `vw_active_announcements` y queries utilitarios |
+| `04_missing_elements.sql` | Tablas adicionales: `incidents`, `shifts`, `shift_checklist_items`, `amenities`, `payments` |
+| `05_auth.sql` | Migración de autenticación: columna `password`, rol `SUPER_ADMIN`, índices parciales para email único con NULL |
+
+## Arquitectura
 
 ### Multi-tenancy
-Every table includes a `condominium_id` foreign key. All queries should be scoped to a single condominium. The `users` table carries a `role` field (`ADMIN`, `CONSERJE`, `RESIDENTE`) for RBAC enforcement at the application layer.
+Todas las tablas incluyen `condominium_id` como FK. Las queries siempre deben estar acotadas a un condominio. La tabla `users` tiene campo `role` para RBAC en la capa de aplicación.
 
-### Domain Modules
+### Roles de usuario
+| Rol | condominium_id | Descripción |
+|---|---|---|
+| `ADMIN` | requerido | Administrador de un condominio |
+| `CONSERJE` | requerido | Conserje de un condominio |
+| `RESIDENTE` | requerido | Residente/propietario de una unidad |
+| `SUPER_ADMIN` | `NULL` | Administrador global de la plataforma |
 
-| Module | Tables |
+### Módulos del dominio
+
+| Módulo | Tablas |
 |---|---|
-| Identity | `condominiums`, `users`, `units` |
-| Reservations | `reservations`, `amenities` |
-| Expenses & Billing | `common_expenses`, `common_expense_items`, `payment_links` |
-| Documents & Providers | `documents`, `providers` |
-| Community Voting | `votes`, `vote_options`, `vote_responses` |
-| Parcels & Logistics | `parcels` |
-| Visitor Management | `visits` |
-| Announcements | `announcements` |
+| Identidad | `condominiums`, `users`, `units` |
+| Reservas | `reservations`, `amenities` |
+| Gastos y Cobranza | `common_expenses`, `common_expense_items`, `payments` |
+| Documentos y Proveedores | `documents`, `providers` |
+| Votaciones | `votes`, `vote_options`, `vote_responses` |
+| Encomiendas | `parcels` |
+| Visitas | `visits` |
+| Comunicados | `announcements` |
+| Incidencias | `incidents` |
+| Turnos | `shifts`, `shift_checklist_items` |
 
-### Status Workflows
-`reservations`, `common_expenses`, `visits`, and `votes` each have a `STATUS` column driving approval/lifecycle state machines. Valid state transitions are enforced by the backend service layer.
+### Convenciones SQL
+- Schema `lazaro.*` para todas las tablas (e.g. `lazaro.condominiums`)
+- Columnas en `snake_case`
+- IDs generados con `SERIAL` o `BIGSERIAL`
+- Patrón `INSERT ... RETURNING id` en el backend
+- `condominium_id IS NULL` permitido solo para usuarios `SUPER_ADMIN` (índices parciales en `05_auth.sql`)
 
-### Views (`03_views_and_queries.sql`)
-- `vw_pending_common_expenses` — unpaid expense items grouped by unit
-- `vw_active_announcements` — non-expired announcements currently in effect
-- Utility queries for reservation counts, vote tracking, and document expiration warnings (60-day lookahead)
+## Usuarios de demo (creados por `05_auth.sql`)
+
+| Email | Password | Rol |
+|---|---|---|
+| `superadmin@plataforma.cl` | `super123` | SUPER_ADMIN |
+| `admin@lazaro.cl` | `admin123` | ADMIN |
+| `conserje@lazaro.cl` | `conserje123` | CONSERJE |
+| `rocio@lazaro.cl` | `residente123` | RESIDENTE |
