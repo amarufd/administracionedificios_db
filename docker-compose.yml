@@ -14,11 +14,14 @@ services:
       - ./docker/initdb.sh:/docker-entrypoint-initdb.d/00_initdb.sh:ro
       - ./sql:/docker-entrypoint-initdb.d/sql:ro
     networks:
-      - ediges
+      - mediaserver_suite
+      - mediaserver_data
 
 volumes:
   pgdata:
 
 networks:
-  ediges:
-    name: ediges
+  mediaserver_suite:
+    external: true
+  mediaserver_data:
+    external: true
