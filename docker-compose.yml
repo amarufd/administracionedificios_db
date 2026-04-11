@@ -5,17 +5,20 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_DB: lazarodb
-      POSTGRES_USER: postgres
+      POSTGRES_USER: edigesadmin
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./sql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
-      - ./sql/02_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql
-      - ./sql/03_views_and_queries.sql:/docker-entrypoint-initdb.d/03_views_and_queries.sql
-      - ./sql/04_missing_elements.sql:/docker-entrypoint-initdb.d/04_missing_elements.sql
-      - ./sql/05_auth.sql:/docker-entrypoint-initdb.d/05_auth.sql
+      - ./docker/initdb.sh:/docker-entrypoint-initdb.d/00_initdb.sh:ro
+      - ./sql:/docker-entrypoint-initdb.d/sql:ro
+    networks:
+      - ediges
 
 volumes:
   pgdata:
+
+networks:
+  ediges:
+    name: ediges
