@@ -10,10 +10,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Con Docker (recomendado)
 ```bash
-# Desde la raíz del workspace
-docker-compose up -d db
+docker compose up -d
 ```
-El contenedor aplica automáticamente todos los archivos `sql/*.sql` en orden al iniciar.
+El contenedor (`lazaro-db`) aplica automáticamente todos los archivos `sql/*.sql` en orden al iniciar.
+
+#### Networking con el backend
+Los proyectos (db, be, front) son docker-compose independientes. Para que el backend pueda resolver `lazaro-db` como hostname, ambos deben estar en una red externa compartida. Cada proyecto tiene un `docker-compose.override.yml` (no commiteado, basado en `docker-compose.override.example.yml`) que los conecta a la red `mediaserver_suite`.
+
+```bash
+# Crear la red externa (solo una vez)
+docker network create mediaserver_suite
+```
+
+Sin el override, el contenedor queda solo en su red default (`administracionedificios_db_default`) y el backend no puede conectarse.
 
 ### Manual
 ```bash
