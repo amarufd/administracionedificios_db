@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS condominiums (
     id                  BIGSERIAL PRIMARY KEY,
     name                VARCHAR(120) NOT NULL,
     display_name        VARCHAR(120) NOT NULL,
+    condominium_type    VARCHAR(30),
     is_default          BOOLEAN NOT NULL DEFAULT FALSE,
     transfer_account    VARCHAR(120),
     contact_phone       VARCHAR(40),
@@ -21,6 +22,9 @@ CREATE TABLE IF NOT EXISTS users (
     created_at          TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE (condominium_id, email)
 );
+
+ALTER TABLE condominiums
+    ADD COLUMN IF NOT EXISTS admin_user_id BIGINT REFERENCES users(id);
 
 CREATE TABLE IF NOT EXISTS units (
     id                  BIGSERIAL PRIMARY KEY,
