@@ -1,0 +1,28 @@
+# Copiar a docker-compose.override.yml y ajustar segun tu entorno local.
+# Este archivo NO se commitea — solo el example.
+
+# Ejemplo con 1 red:
+# services:
+#   db:
+#     networks:
+#       - suite
+#
+# networks:
+#   suite:
+#     name: ${NETWORK_SUITE}
+#     external: true
+
+# Ejemplo con 2 redes:
+services:
+  db:
+    networks:
+      - suite
+      - data
+
+networks:
+  suite:
+    name: ${NETWORK_SUITE}
+    external: true
+  data:
+    name: ${NETWORK_DATA}
+    external: true
