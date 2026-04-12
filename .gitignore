@@ -83,10 +83,10 @@ application-local.yml
 
 # Environment variables
 .env
+!.env.example
 
 # Docker override local
 docker-compose.override.yml
 
 
 .claude
-
