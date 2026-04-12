@@ -1,8 +1,8 @@
 SET search_path TO lazaro, public;
 
-INSERT INTO condominiums (id, name, display_name, is_default, transfer_account, contact_phone)
+INSERT INTO condominiums (id, name, display_name, condominium_type, is_default, transfer_account, contact_phone)
 VALUES
-(1, 'Condominio Lazaro Centro', 'Lazaro Centro', TRUE, 'CTA-001-CLP', '+56 2 5555 0001')
+(1, 'Condominio Lazaro Centro', 'Lazaro Centro', 'EDIFICIO', TRUE, 'CTA-001-CLP', '+56 2 5555 0001')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO users (id, condominium_id, full_name, email, role)
@@ -11,6 +11,10 @@ VALUES
 (2, 1, 'Carlos Conserje', 'conserje@lazaro.cl', 'CONSERJE'),
 (3, 1, 'Rocio Residente', 'rocio@lazaro.cl', 'RESIDENTE')
 ON CONFLICT (id) DO NOTHING;
+
+UPDATE condominiums
+SET admin_user_id = 1
+WHERE id = 1 AND admin_user_id IS NULL;
 
 INSERT INTO units (id, condominium_id, code, floor, owner_user_id)
 VALUES
