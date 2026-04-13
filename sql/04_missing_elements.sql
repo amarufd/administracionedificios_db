@@ -13,7 +13,20 @@ ALTER TABLE condominiums
     ADD COLUMN IF NOT EXISTS address            TEXT,
     ADD COLUMN IF NOT EXISTS operational_status VARCHAR(20) NOT NULL DEFAULT 'ACTIVO',
     ADD COLUMN IF NOT EXISTS total_units        INT,
-    ADD COLUMN IF NOT EXISTS logo_url           TEXT;
+    ADD COLUMN IF NOT EXISTS logo_url           TEXT,
+    ADD COLUMN IF NOT EXISTS account_holder_name VARCHAR(160),
+    ADD COLUMN IF NOT EXISTS account_holder_rut  VARCHAR(20),
+    ADD COLUMN IF NOT EXISTS bank_name           VARCHAR(120),
+    ADD COLUMN IF NOT EXISTS bank_account_type   VARCHAR(60),
+    ADD COLUMN IF NOT EXISTS bank_account_number VARCHAR(120),
+    ADD COLUMN IF NOT EXISTS transfer_email      VARCHAR(180),
+    ADD COLUMN IF NOT EXISTS transfer_alias      VARCHAR(120);
+
+-- backfill legacy transfer account into the explicit account number field
+UPDATE condominiums
+SET bank_account_number = transfer_account
+WHERE bank_account_number IS NULL
+  AND transfer_account IS NOT NULL;
 
 -- users: contact & identity
 ALTER TABLE users

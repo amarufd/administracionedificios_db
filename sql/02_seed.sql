@@ -1,8 +1,12 @@
 SET search_path TO lazaro, public;
 
-INSERT INTO condominiums (id, name, display_name, condominium_type, is_default, transfer_account, contact_phone)
+INSERT INTO condominiums (
+    id, name, display_name, condominium_type, is_default, transfer_account,
+    account_holder_name, account_holder_rut, bank_name, bank_account_type,
+    bank_account_number, transfer_email, transfer_alias, contact_phone
+)
 VALUES
-(1, 'Condominio Lazaro Centro', 'Lazaro Centro', 'EDIFICIO', TRUE, 'CTA-001-CLP', '+56 2 5555 0001')
+(1, 'Condominio Lazaro Centro', 'Lazaro Centro', 'EDIFICIO_RESIDENCIAL', TRUE, '12345678', 'Comunidad Lazaro Centro', '76.123.456-7', 'BancoEstado', 'Cuenta Corriente', '12345678', 'pagos@lazaro.cl', 'GC Lazaro Centro', '+56 2 5555 0001')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO users (id, condominium_id, full_name, email, role)

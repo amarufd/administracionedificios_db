@@ -1,4 +1,4 @@
-# Lazaro Backend DAO + PostgreSQL
+# Lazaro PostgreSQL
 
 Este paquete se generó a partir de tu archivo `Lazaro.drawio.xml`, considerando 3 pestañas:
 - `Interfaz visual`
@@ -10,19 +10,17 @@ Este paquete se generó a partir de tu archivo `Lazaro.drawio.xml`, considerando
 - `sql/01_schema.sql`: esquema PostgreSQL.
 - `sql/02_seed.sql`: datos de ejemplo para probar flujos.
 - `sql/03_views_and_queries.sql`: vistas y consultas útiles.
-- `java/`: proyecto Java (Maven) con DAOs JDBC.
+- `sql/04_missing_elements.sql` a `sql/07_normalize_condominium_types.sql`: migraciones incrementales del modelo.
 
 ## Ejecutar SQL
 ```bash
 psql -h localhost -U postgres -d lazaro_condominio -f sql/01_schema.sql
 psql -h localhost -U postgres -d lazaro_condominio -f sql/02_seed.sql
 psql -h localhost -U postgres -d lazaro_condominio -f sql/03_views_and_queries.sql
-```
-
-## Compilar DAOs Java
-```bash
-cd java
-mvn clean package
+psql -h localhost -U postgres -d lazaro_condominio -f sql/04_missing_elements.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/05_auth.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/06_condominium_admin_flow.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/07_normalize_condominium_types.sql
 ```
 
 ## Notas técnicas

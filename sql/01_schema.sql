@@ -5,9 +5,27 @@ CREATE TABLE IF NOT EXISTS condominiums (
     id                  BIGSERIAL PRIMARY KEY,
     name                VARCHAR(120) NOT NULL,
     display_name        VARCHAR(120) NOT NULL,
-    condominium_type    VARCHAR(30),
+    condominium_type    VARCHAR(30) CHECK (
+        condominium_type IS NULL OR condominium_type IN (
+            'EDIFICIO_RESIDENCIAL',
+            'EDIFICIO_USO_MIXTO',
+            'CONDOMINIO_CASAS',
+            'CONDOMINIO_PARCELAS',
+            'CONDOMINIO_EDIFICIOS',
+            'CONDOMINIO_RES_COMERCIAL',
+            'OFICINA_OFICINAS',
+            'OFICINA_CON_COMERCIO'
+        )
+    ),
     is_default          BOOLEAN NOT NULL DEFAULT FALSE,
     transfer_account    VARCHAR(120),
+    account_holder_name VARCHAR(160),
+    account_holder_rut  VARCHAR(20),
+    bank_name           VARCHAR(120),
+    bank_account_type   VARCHAR(60),
+    bank_account_number VARCHAR(120),
+    transfer_email      VARCHAR(180),
+    transfer_alias      VARCHAR(120),
     contact_phone       VARCHAR(40),
     created_at          TIMESTAMP NOT NULL DEFAULT NOW()
 );
