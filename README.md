@@ -10,7 +10,7 @@ Este paquete se generó a partir de tu archivo `Lazaro.drawio.xml`, considerando
 - `sql/01_schema.sql`: esquema PostgreSQL.
 - `sql/02_seed.sql`: datos de ejemplo para probar flujos.
 - `sql/03_views_and_queries.sql`: vistas y consultas útiles.
-- `sql/04_missing_elements.sql` a `sql/07_normalize_condominium_types.sql`: migraciones incrementales del modelo.
+- `sql/04_missing_elements.sql` a `sql/10_concurrency_guards.sql`: migraciones incrementales del modelo.
 
 ## Ejecutar SQL
 ```bash
@@ -21,6 +21,9 @@ psql -h localhost -U postgres -d lazaro_condominio -f sql/04_missing_elements.sq
 psql -h localhost -U postgres -d lazaro_condominio -f sql/05_auth.sql
 psql -h localhost -U postgres -d lazaro_condominio -f sql/06_condominium_admin_flow.sql
 psql -h localhost -U postgres -d lazaro_condominio -f sql/07_normalize_condominium_types.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/08_fix_id_sequences.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/09_documents_unique_file_url.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/10_concurrency_guards.sql
 ```
 
 También puedes ejecutarlos todos en orden con:
@@ -32,13 +35,23 @@ También puedes ejecutarlos todos en orden con:
 El script:
 - toma `POSTGRES_DB`, `POSTGRES_USER` y `POSTGRES_PASSWORD` desde `.env`
 - usa `localhost:5432` por defecto
-- ejecuta los archivos de `sql/` en orden por nombre, por lo que `01_...` a `07_...` quedan aplicados secuencialmente
+- ejecuta los archivos de `sql/` en orden por nombre, por lo que `01_...` a `10_...` quedan aplicados secuencialmente
 
 Si necesitas otro host o puerto:
 
 ```bash
 DB_HOST=127.0.0.1 DB_PORT=5433 ./scripts/run_all_sql.sh
 ```
+
+Si la base ya existe y el volumen de PostgreSQL no se va a recrear, ejecuta al menos:
+
+```bash
+psql -h localhost -U postgres -d lazaro_condominio -f sql/08_fix_id_sequences.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/09_documents_unique_file_url.sql
+psql -h localhost -U postgres -d lazaro_condominio -f sql/10_concurrency_guards.sql
+```
+
+Esas migraciones reparan columnas `id` sin default autoincremental, sincronizan cada secuencia con el `MAX(id)` actual y agregan restricciones para impedir duplicados concurrentes en documentos, turnos, pagos y reservas.
 
 ## Notas técnicas
 - Patrón aplicado: `Repository/DAO` + `Service-ready`.
