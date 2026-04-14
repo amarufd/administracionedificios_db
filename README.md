@@ -23,6 +23,23 @@ psql -h localhost -U postgres -d lazaro_condominio -f sql/06_condominium_admin_f
 psql -h localhost -U postgres -d lazaro_condominio -f sql/07_normalize_condominium_types.sql
 ```
 
+También puedes ejecutarlos todos en orden con:
+
+```bash
+./scripts/run_all_sql.sh
+```
+
+El script:
+- toma `POSTGRES_DB`, `POSTGRES_USER` y `POSTGRES_PASSWORD` desde `.env`
+- usa `localhost:5432` por defecto
+- ejecuta los archivos de `sql/` en orden por nombre, por lo que `01_...` a `07_...` quedan aplicados secuencialmente
+
+Si necesitas otro host o puerto:
+
+```bash
+DB_HOST=127.0.0.1 DB_PORT=5433 ./scripts/run_all_sql.sh
+```
+
 ## Notas técnicas
 - Patrón aplicado: `Repository/DAO` + `Service-ready`.
 - Arquitectura objetivo: compatible con `Clean/Hexagonal` (los DAOs quedan como adapters de persistencia).
