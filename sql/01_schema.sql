@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS amenities (
     name                VARCHAR(100) NOT NULL,
     requires_approval   BOOLEAN NOT NULL DEFAULT TRUE,
     open_time           TIME,
-    close_time          TIME
+    close_time          TIME,
+    rental_cost         NUMERIC(12,2) NOT NULL DEFAULT 0 CHECK (rental_cost >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS reservations (

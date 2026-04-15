@@ -64,7 +64,8 @@ ALTER TABLE amenities
     ADD COLUMN IF NOT EXISTS max_advance_days            INT,
     ADD COLUMN IF NOT EXISTS max_reservations_per_period INT,
     ADD COLUMN IF NOT EXISTS period_type                 VARCHAR(20),
-    ADD COLUMN IF NOT EXISTS rules_text                  TEXT;
+    ADD COLUMN IF NOT EXISTS rules_text                  TEXT,
+    ADD COLUMN IF NOT EXISTS rental_cost                 NUMERIC(12,2) NOT NULL DEFAULT 0;
 
 -- documents: visibility control
 ALTER TABLE documents
