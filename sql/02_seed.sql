@@ -20,10 +20,10 @@ UPDATE condominiums
 SET admin_user_id = 1
 WHERE id = 1 AND admin_user_id IS NULL;
 
-INSERT INTO units (id, condominium_id, code, floor, owner_user_id)
+INSERT INTO units (id, condominium_id, code, unit_type, floor, owner_user_id)
 VALUES
-(1, 1, 'A-101', '1', 3),
-(2, 1, 'A-201', '2', NULL)
+(1, 1, 'dep-A-101', 'DEPARTAMENTO', '1', 3),
+(2, 1, 'dep-A-201', 'DEPARTAMENTO', '2', NULL)
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO amenities (id, condominium_id, name, requires_approval, open_time, close_time)

@@ -48,6 +48,9 @@ CREATE TABLE IF NOT EXISTS units (
     id                  BIGSERIAL PRIMARY KEY,
     condominium_id      BIGINT NOT NULL REFERENCES condominiums(id),
     code                VARCHAR(40) NOT NULL,
+    unit_type           VARCHAR(30) NOT NULL DEFAULT 'DEPARTAMENTO' CHECK (
+        unit_type IN ('DEPARTAMENTO', 'LOCAL_COMERCIAL', 'OFICINA')
+    ),
     floor               VARCHAR(10),
     owner_user_id       BIGINT REFERENCES users(id),
     status              VARCHAR(20) NOT NULL DEFAULT 'ACTIVA',
