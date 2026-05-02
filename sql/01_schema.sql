@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS units (
         unit_type IN ('DEPARTAMENTO', 'LOCAL_COMERCIAL', 'OFICINA')
     ),
     floor               VARCHAR(10),
+    proration           VARCHAR(20),
     owner_user_id       BIGINT REFERENCES users(id),
     status              VARCHAR(20) NOT NULL DEFAULT 'ACTIVA',
     UNIQUE (condominium_id, code)
