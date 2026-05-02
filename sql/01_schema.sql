@@ -26,6 +26,9 @@ CREATE TABLE IF NOT EXISTS condominiums (
     bank_account_number VARCHAR(120),
     transfer_email      VARCHAR(180),
     transfer_alias      VARCHAR(120),
+    show_storage_menu   BOOLEAN NOT NULL DEFAULT TRUE,
+    show_parking_menu   BOOLEAN NOT NULL DEFAULT TRUE,
+    show_bike_parking_menu BOOLEAN NOT NULL DEFAULT TRUE,
     contact_phone       VARCHAR(40),
     created_at          TIMESTAMP NOT NULL DEFAULT NOW()
 );

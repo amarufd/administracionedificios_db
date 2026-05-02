@@ -17,6 +17,9 @@ CREATE TABLE IF NOT EXISTS unit_assets (
     brand                      VARCHAR(80),
     model                      VARCHAR(80),
     color                      VARCHAR(60),
+    parking_kind               VARCHAR(20) DEFAULT 'RESIDENCIAL' CHECK (
+        parking_kind IS NULL OR parking_kind IN ('RESIDENCIAL', 'VISITA')
+    ),
     created_at                 TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE (building_id, asset_type, code)
 );
