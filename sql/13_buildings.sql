@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS buildings (
     ),
     floors              INT,
     address             VARCHAR(255),
+    visitor_parking_max_hours INT NOT NULL DEFAULT 2 CHECK (visitor_parking_max_hours >= 1),
     is_active           BOOLEAN NOT NULL DEFAULT TRUE,
     created_at          TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE (condominium_id, name)
