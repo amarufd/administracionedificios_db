@@ -13,7 +13,8 @@ INSERT INTO users (id, condominium_id, full_name, email, role)
 VALUES
 (1, 1, 'Ana Admin', 'admin@lazaro.cl', 'ADMIN'),
 (2, 1, 'Carlos Conserje', 'conserje@lazaro.cl', 'CONSERJE'),
-(3, 1, 'Rocio Residente', 'rocio@lazaro.cl', 'RESIDENTE')
+(3, 1, 'Rocio Residente', 'rocio@lazaro.cl', 'RESIDENTE'),
+(4, 1, 'Mesa Directiva', 'mesa@lazaro.cl', 'MESA_DIRECTIVA')
 ON CONFLICT (id) DO NOTHING;
 
 UPDATE condominiums
