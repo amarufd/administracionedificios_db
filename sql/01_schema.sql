@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS users (
     condominium_id      BIGINT NOT NULL REFERENCES condominiums(id),
     full_name           VARCHAR(120) NOT NULL,
     email               VARCHAR(180) NOT NULL,
-    role                VARCHAR(30) NOT NULL CHECK (role IN ('ADMIN','CONSERJE','RESIDENTE')),
+    role                VARCHAR(30) NOT NULL CHECK (role IN ('ADMIN','CONSERJE','RESIDENTE','MESA_DIRECTIVA')),
     is_active           BOOLEAN NOT NULL DEFAULT TRUE,
     created_at          TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE (condominium_id, email)
@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS parcels (
     id                  BIGSERIAL PRIMARY KEY,
     condominium_id      BIGINT NOT NULL REFERENCES condominiums(id),
     unit_id             BIGINT NOT NULL REFERENCES units(id),
+    parcel_type         VARCHAR(30) NOT NULL DEFAULT 'ENCOMIENDA' CHECK (parcel_type IN ('ENCOMIENDA','DELIVERY','VIVERES')),
     carrier             VARCHAR(80),
     tracking_number     VARCHAR(80),
     received_at         TIMESTAMP NOT NULL,

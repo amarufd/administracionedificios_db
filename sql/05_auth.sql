@@ -9,7 +9,7 @@ ALTER TABLE users ALTER COLUMN condominium_id DROP NOT NULL;
 -- Ampliar el CHECK de rol para incluir SUPER_ADMIN
 ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
 ALTER TABLE users ADD CONSTRAINT users_role_check
-    CHECK (role IN ('ADMIN','CONSERJE','RESIDENTE','SUPER_ADMIN'));
+    CHECK (role IN ('ADMIN','CONSERJE','RESIDENTE','SUPER_ADMIN','MESA_DIRECTIVA'));
 
 -- Columna password (plain text para esta etapa; reemplazar con bcrypt en producción)
 ALTER TABLE users ADD COLUMN IF NOT EXISTS password VARCHAR(128) NOT NULL DEFAULT 'admin123';
@@ -30,5 +30,6 @@ ON CONFLICT DO NOTHING;
 
 -- Actualizar passwords de usuarios seed
 UPDATE users SET password = 'admin123'     WHERE email = 'admin@lazaro.cl';
+UPDATE users SET password = 'mesa123'      WHERE email = 'mesa@lazaro.cl';
 UPDATE users SET password = 'conserje123'  WHERE email = 'conserje@lazaro.cl';
 UPDATE users SET password = 'residente123' WHERE email = 'rocio@lazaro.cl';
