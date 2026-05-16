@@ -1,0 +1,7 @@
+SET search_path TO lazaro, public;
+
+ALTER TABLE units
+  ADD COLUMN IF NOT EXISTS developer_owned BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE unit_assets
+  ADD COLUMN IF NOT EXISTS developer_owned BOOLEAN NOT NULL DEFAULT FALSE;
