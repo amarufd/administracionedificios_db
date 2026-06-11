@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS users (
     condominium_id      BIGINT NOT NULL REFERENCES condominiums(id),
     full_name           VARCHAR(120) NOT NULL,
     email               VARCHAR(180) NOT NULL,
+    secondary_email     VARCHAR(180),
     role                VARCHAR(30) NOT NULL CHECK (role IN ('ADMIN','CONSERJE','RESIDENTE','MESA_DIRECTIVA')),
     is_active           BOOLEAN NOT NULL DEFAULT TRUE,
     created_at          TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -57,6 +58,7 @@ CREATE TABLE IF NOT EXISTS units (
     floor               VARCHAR(10),
     proration           VARCHAR(20),
     owner_user_id       BIGINT REFERENCES users(id),
+    needs_mobility_assistance BOOLEAN NOT NULL DEFAULT FALSE,
     status              VARCHAR(20) NOT NULL DEFAULT 'ACTIVA',
     UNIQUE (condominium_id, code)
 );
