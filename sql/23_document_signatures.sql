@@ -1,3 +1,5 @@
+SET search_path TO lazaro, public;
+
 -- Legal documents: signature tracking
 ALTER TABLE documents
     ADD COLUMN IF NOT EXISTS requires_signature BOOLEAN NOT NULL DEFAULT FALSE,
