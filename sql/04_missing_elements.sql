@@ -32,7 +32,8 @@ WHERE bank_account_number IS NULL
 ALTER TABLE users
     ADD COLUMN IF NOT EXISTS phone       VARCHAR(40),
     ADD COLUMN IF NOT EXISTS document_id VARCHAR(60),
-    ADD COLUMN IF NOT EXISTS avatar_url  TEXT;
+    ADD COLUMN IF NOT EXISTS avatar_url  TEXT,
+    ADD COLUMN IF NOT EXISTS avatar_source_url TEXT;
 
 -- units: renter linkage & occupation status
 ALTER TABLE units
