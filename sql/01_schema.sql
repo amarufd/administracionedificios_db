@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS users (
     full_name           VARCHAR(120) NOT NULL,
     email               VARCHAR(180) NOT NULL,
     secondary_email     VARCHAR(180),
-    role                VARCHAR(30) NOT NULL CHECK (role IN ('ADMIN','CONSERJE','RESIDENTE','MESA_DIRECTIVA')),
+    staff_position      VARCHAR(80),
+    role                VARCHAR(30) NOT NULL CHECK (role IN ('ADMIN','CONSERJE','RESIDENTE','MESA_DIRECTIVA','SUPER_ADMIN','PERSONAL')),
     is_active           BOOLEAN NOT NULL DEFAULT TRUE,
     created_at          TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE (condominium_id, email)
