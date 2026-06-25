@@ -1,3 +1,8 @@
+-- ============================================================
+-- Migration 41: rol personal de staff
+-- ============================================================
+SET search_path TO lazaro, public;
+
 ALTER TABLE users
     ADD COLUMN IF NOT EXISTS staff_position VARCHAR(80);
 
